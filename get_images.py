@@ -9,22 +9,23 @@ def get_images(images):
     images_and_tags_list = {}
     for image in images:
         str_image = str(image)
-        if ('registry.mindklab.com:5000' not in str_image)or( '<Image:' not in str_image):
-            str_image_tags = str(image.tags)
-            str_images_tags_splited = str_image_tags.split(" ")
-            for image_tag in str_images_tags_splited:
-                if image_tag != '<Image:':
-                    image_tag = remove_char(image_tag,",'<>[]")
-                    image_tag = image_tag[1:]
-                    tags_list = []
-                    image, tag = image_tag.split(":")
-                    #				print "image: " + image
-                    #				print "tag:" + tag
-                    if (tag != 'latest') and (tag != 'local'):
-                        if image in images_and_tags_list.keys():
-                            tags_list = images_and_tags_list[image]
-                        tags_list.append(tag)
-                        images_and_tags_list[image] = tags_list
+        if ('registry.mindklab.com:5000' not in str_image):
+            if( "<Image: ''>" not in str_image):
+                str_image_tags = str(image.tags)
+                str_images_tags_splited = str_image_tags.split(" ")
+                for image_tag in str_images_tags_splited:
+                    if image_tag != '<Image:':
+                        image_tag = remove_char(image_tag,",'<>[]")
+                        image_tag = image_tag[1:]
+                        tags_list = []
+                        image, tag = image_tag.split(":")
+                        #				print "image: " + image
+                        #				print "tag:" + tag
+                        if (tag != 'latest') and (tag != 'local'):
+                            if image in images_and_tags_list.keys():
+                                tags_list = images_and_tags_list[image]
+                            tags_list.append(tag)
+                            images_and_tags_list[image] = tags_list
     return images_and_tags_list
 
 def sort_tag(images_and_tags_list ):
