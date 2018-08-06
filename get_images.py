@@ -30,24 +30,44 @@ def get_images(images):
 
 def sort_tag(images_and_tags_list ):
     print "sorting " + str(images_and_tags_list) + "\n"
+    images_tags_number_list = {}
     for key, values in images_and_tags_list.items():
         values = sorted(values)
         tags_count = len(values)
         current_tag = 0
+        tag_name_list = {}
+        tag_number_list = []
+        current_value = ''
+        prev_value = ''
         for value in values:
+
             output_color = 'green'
             if (tags_count != 1)and(current_tag +1) != tags_count:
                 output_color = 'red'
-            print  colored ( str(key)+ ":" + str(value),output_color)
+#            print  colored ( str(key)+ ":" + str(value),output_color)
             current_tag += 1
+            dot_position = str(value).rfind('.')
+            if dot_position != -1:
+                tag_name = str(value)[:dot_position]
+                tag_number = str(value)[dot_position+1:]
+                current_value = tag_name
+                if prev_value != current_value:
+                    prev_value = current_value
+                    tag_number_list = []
+                tag_number_list.append(tag_number)
+                tag_name_list[tag_name] = (tag_number_list)
+                images_tags_number_list[key] = tag_name_list
+#                print colored(str(key), 'blue') + " : " +colored(tag_name,'red') + " . " + colored(tag_number,'green')
+#                 if str(key) == 'sfreydin/test_image_1':
+#                     print tag_number_list
+    return images_tags_number_list
 
-
-def main():
+def print_list():
     client = docker.from_env()
     images = client.images.list()
     images_and_tags_list = get_images(images)
     sorted_images_and_tags_list = sort_tag(images_and_tags_list )
-
+    print json.dumps(sorted_images_and_tags_list, indent=2)
 
 '''
 	#to output in json format: 
@@ -57,4 +77,4 @@ def main():
 #'''
 
 if __name__ == "__main__":
-    main()
+    print_list()
