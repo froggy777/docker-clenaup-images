@@ -28,8 +28,24 @@ def get_images(images):
                             images_and_tags_list[image] = tags_list
     return images_and_tags_list
 
+def print_old_tags(tag_number_list):
+    print "We need to delete next images:"
+    for images, tags in tag_number_list.items():
+        for tag_name, tag_number in tags.items():
+            tag_number = sorted(tag_number)
+            len_tag_number = len(tag_number)
+            if len_tag_number > 1:
+#                print images + " : " + str(tag_name) + " . " + str(tag_number)
+                current_tag_count = 0
+                for tag in tag_number:
+                    current_tag_count +=1
+                    if current_tag_count != len_tag_number:
+                        print images + ":" + str(tag_name) + "." + str(tag)
+
+
+
 def sort_tag(images_and_tags_list ):
-    print "sorting " + str(images_and_tags_list) + "\n"
+#    print "sorting " + str(images_and_tags_list) + "\n"
     images_tags_number_list = {}
     for key, values in images_and_tags_list.items():
         values = sorted(values)
@@ -58,8 +74,10 @@ def sort_tag(images_and_tags_list ):
                 tag_name_list[tag_name] = (tag_number_list)
                 images_tags_number_list[key] = tag_name_list
 #                print colored(str(key), 'blue') + " : " +colored(tag_name,'red') + " . " + colored(tag_number,'green')
-#                 if str(key) == 'sfreydin/test_image_1':
-#                     print tag_number_list
+#                  if str(key) == 'sfreydin/test_image_1':
+#                      print tag_number_list
+    print_old_tags(images_tags_number_list)
+
     return images_tags_number_list
 
 def print_list():
@@ -67,12 +85,13 @@ def print_list():
     images = client.images.list()
     images_and_tags_list = get_images(images)
     sorted_images_and_tags_list = sort_tag(images_and_tags_list )
-    print json.dumps(sorted_images_and_tags_list, indent=2)
+
 
 '''
 	#to output in json format: 
 	print " " 
 	print json.dumps(images_and_tags_list, indent=2)
+	print json.dumps(sorted_images_and_tags_list, indent=2)
 	print " "
 #'''
 
